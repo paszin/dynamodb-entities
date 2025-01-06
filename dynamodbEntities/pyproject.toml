@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dynamodbEntities"
+version = "0.0.1-alpha"
+authors = [
+  { name="Pascal Crenzin"},
+]
+description = "single table design made convinient"
+readme = "README.md"
+requires-python = ">=3.10"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent"
+    ]
+dependencies = [
+    "boto3>=1.26.121",
+    "six==1.16.0",
+    "simplejson==3.19.2"
+]
+[project.scripts]
+dynamodb-entities-import = "dynamodbEntities.bin:import"
