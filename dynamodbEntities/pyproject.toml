@@ -22,4 +22,4 @@ dependencies = [
     "simplejson==3.19.2"
 ]
 [project.scripts]
-dynamodb-entities-import = "dynamodbEntities.bin:import"
+dynamodb-entities-import = "dynamodbEntities.bin:importWorkbench"

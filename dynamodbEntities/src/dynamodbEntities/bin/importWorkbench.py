@@ -95,24 +95,26 @@ parser.add_argument("--dest", "-d", help="path to output")
 args = parser.parse_args()
 
 outdir = Path(args.dest, "entities")
-outdir.mkdir(exist_ok=True)
+# outdir = Path("./example/testrun/entities")
+outdir.mkdir(exist_ok=True, parents=True)
 
+importFile = args.input
+# importFile = "/home/paszin/Documents/personal/dynamodb-entities/example/webshob/Webshop.json"
 
-with open(args.input) as f:
+with open(importFile) as f:
     data = json.load(f)
 
 
 partitionKey = data["DataModel"][0]["KeyAttributes"]["PartitionKey"]["AttributeName"]
 partitionKeyType = data["DataModel"][0]["KeyAttributes"]["PartitionKey"]["AttributeType"]
 try:
-    sortKey = data["DataModel"][0]["KeyAttributes"]["SortKey"][1]["AttributeName"]
-    sortKeyType = data["DataModel"][0]["KeyAttributes"]["SortKey"][1]["AttributeType"]
+    sortKey = data["DataModel"][0]["KeyAttributes"]["SortKey"]["AttributeName"]
+    sortKeyType = data["DataModel"][0]["KeyAttributes"]["SortKey"]["AttributeType"]
 except:
     sortKey = None
     sortKeyType = None
 facets = data["DataModel"][0]["TableFacets"]
 
-# %%
 
 facet_names = []
 
@@ -132,12 +134,11 @@ for facet in facets:
             [f"{p}={p}" for p in facet_properties])
     )
 
-    filename = "{facet_name}.py"
+    filename = f"{facet_name}.py"
 
     with open(outdir / filename, "w") as f:
         f.write(filecontent)
 
-# %%
 
 init_file = init_template.format(
     imports="\n".join([f"from .{name} import {name}" for name in facet_names]),
@@ -148,7 +149,7 @@ with open(outdir / "__init__.py", "w") as f:
     f.write(init_file)
 
 
-# %%
+
 
 factory_file = factory_template.format(
     pk=partitionKey,
@@ -175,7 +176,7 @@ tablespec_data = {
     "GlobalSecondaryIndexes": [],
 }
 
-if data[0]["KeyAttributes"].get("SortKey"):
+if sortKey:
     tablespec_data["AttributeDefinitions"].append(
         {"AttributeName": sortKey, "AttributeType": sortKeyType}
     )
@@ -183,7 +184,7 @@ if data[0]["KeyAttributes"].get("SortKey"):
         {"AttributeName": sortKey, "KeyType": "RANGE"}
     )
 
-for gsi in tablespec_data.get("GlobalSecondaryIndexes", []):
+for gsi in data["DataModel"][0]["GlobalSecondaryIndexes"]:
 
     tablespec_data["GlobalSecondaryIndexes"].append(
         {
