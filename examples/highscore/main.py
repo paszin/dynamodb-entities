@@ -1,11 +1,5 @@
 
 import boto3
-# from entities import PlayScore, PlayDate, UserStats
-
-from entities.PlayScore import PlayScore
-from entities.PlayDate import PlayDate
-from entities.UserStats import UserStats
-import functools
 
 from datastore import Datastore
 

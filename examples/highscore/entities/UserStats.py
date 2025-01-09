@@ -32,5 +32,5 @@ class UserStats(Entity):
     @classmethod
     def get_user_stats(cls, username):
         return dict(
-            Key=cls(username)._get_key()
+            Key=cls(username).get_key()
         )
