@@ -6,3 +6,5 @@ from .baseDatastore import BaseDatastore
 
 __all__ = ["Entity", "decorators", "helpers",
            "get_entity_class", "BaseDatastore"]
+
+__version__ = "0.0.1"

@@ -1,0 +1,36 @@
+name: Publish
+
+on:
+  push:
+    branches:
+      - 'main'
+ 
+jobs:
+  build:
+    name: Publish
+    runs-on: ubuntu-latest
+    env:
+      ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    - name: Setup
+      run: pip install -r dynamodbEntities/requirements.txt
+    - name: Build
+      run: pip install build; cd dynamodbEntities; python -m build; cd ..
+    - name: Get Version
+      run: |
+        cd dynamodbEntities/src
+        echo "VERSION=$(python -c "print(__import__('dynamodbEntities').__version__, end='')")" >> $GITHUB_ENV
+   - name: Release
+      uses: softprops/action-gh-release@v2
+      with:
+        tag_name: v${{ env.VERSION }}
+        name: "dynamodb-entities v${{ env.VERSION }}"
+        generate_release_notes: true
+        files: |
+          README.md
+          dynamodbEntities/dist/dynamodbEntities*
