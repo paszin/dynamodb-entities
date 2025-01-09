@@ -24,12 +24,14 @@ jobs:
         python -m pip install --upgrade pip
         python -m pip install build
 
-    - name: Build wheel
-      run: |
-        python -m build --wheel
+    - name: Setup
+      run: pip install -r dynamodbEntities/requirements.txt
+    - name: Build
+      run: pip install build; cd dynamodbEntities; python -m build; cd ..
+    
 
     - name: Upload artifact
       uses: actions/upload-artifact@v3
       with:
         name: python-wheel
-        path: dist/*.whl
+        path: dynamodbEntities/dist/*.whl
