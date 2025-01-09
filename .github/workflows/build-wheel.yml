@@ -28,10 +28,16 @@ jobs:
       run: pip install -r dynamodbEntities/requirements.txt
     - name: Build
       run: pip install build; cd dynamodbEntities; python -m build; cd ..
-    
-
-    - name: Upload artifact
-      uses: actions/upload-artifact@v3
+    - name: Get Version
+      run: |
+        cd dynamodbEntities/src
+        echo "VERSION=$(python -c "print(__import__('dynamodbEntities').__version__, end='')")" >> $GITHUB_ENV
+   - name: Release
+      uses: softprops/action-gh-release@v2
       with:
-        name: python-wheel
-        path: dynamodbEntities/dist/*.whl
+        tag_name: v${{ env.VERSION }}
+        name: "dynamodb-entities v${{ env.VERSION }}"
+        generate_release_notes: true
+        files: |
+          README.md
+          dynamodbEntities/dist/dynamodbEntities*

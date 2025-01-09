@@ -69,7 +69,7 @@ class Entity:
             item = dynamodbHelpers.dumps(item, as_dict=True)
         return item
 
-    def _get_key(self, marshall=False):
+    def get_key(self, marshall=False):
         """
         returns a dict with primary key and sort key (if given)
         if marhsall is True, the dict will be marshalled (using the __pk_type and __sk_type)
