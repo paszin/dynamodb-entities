@@ -166,8 +166,25 @@ class UserProfile(Entity):
 
 ```
 
-# Sample: Highscore Application
+## Samples
+
+### Highscore Application
 
 In this example we model a simple highscore. We assume that we have a little online game like pinball for single players. Each game is recorded, users should be able to see their most recent plays and also their best plays. Furthermore, there is a global highscore.
 
-Read how to model and implement using dynamodb-entities including a full working sample here: [Highscore](./examples/highscore/.md)
+Read how to model and implement using dynamodb-entities including a full working sample here: [Highscore](./examples/highscore/README.md)
+
+
+### Webshop
+
+In this example we model a simple webshop. A customer can buy items and view recent orders.
+
+Read how to model and implement using dynamodb-entities including a full working sample here: [Webshop](./examples/webshop/README.md)
+
+### Recipe App
+
+Future Work
+
+### User Access Management
+
+Future Work
