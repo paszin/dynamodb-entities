@@ -141,6 +141,32 @@ class UserProfile(Entity):
 The datastore is an abstraction to execute queries on the database.
 
 
+```python
+
+from dynamodbEntities import BaseDatastore
+
+class Datastore(BaseDatastore):
+    pass
+
+# usage
+
+import boto3
+
+# using client and table name
+client = boto3.client("dynamodb")
+datastore = Datastore(client=client, table_name="my-datastore")
+
+# using boto3 resources
+ddb = boto3.resource('dynamodb')
+table = ddb.Table('my-datastore')
+datastore = Datastore(table=table)
+
+# you can also provide session and endpoint_url as parameters
+# all input is converted to use self.table for your operations.
+
+```
+
+
 
 ## 3) Define the queries and operations you need
 
@@ -164,7 +190,22 @@ class UserProfile(Entity):
             KeyConditionExpression=Key('gsi_1').eq('admin'),
         )
 
+class Datastore(BaseDatastore):
+    ...
+
+    def get_all_admins(self):
+
+        return self.table.query(**UserProfile.get_query_all_admins())
+
+    @add_convert_param({"UserProfile": UserProfile})
+    def get_all_admins_with_conversion(self, **kwargs):
+        """
+        if convert = True is passed in the params, then all items are converted to UserProfile instances
+        """
+        return self.table.query(**UserProfile.get_query_all_admins())
+
 ```
+
 
 ## Samples
 
