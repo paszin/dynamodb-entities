@@ -31,6 +31,7 @@ jobs:
         tag_name: v${{ env.VERSION }}
         name: "dynamodb-entities v${{ env.VERSION }}"
         generate_release_notes: true
+        token: ${{ secrets.RELEASE_TOKEN }}
         files: |
           README.md
           dynamodbEntities/dist/dynamodbEntities*
